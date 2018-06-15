@@ -9,17 +9,18 @@ using IRSI.PayrollGen.Models;
 using IRSI.PayrollGen.Services.Adapters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NLog;
 
 namespace IRSI.PayrollGen.Services.Tests
 {
   [TestClass]
   public class PayrollXmlWriterTests
   {
+    private ILogger logger = Mock.Of<ILogger>();
+
     [TestMethod]
     public void Can_Create_PayrollXmlWriter()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollXmlWriter>>();
-
       var subject = new PayrollXmlWriter(logger);
 
       subject.Should().NotBeNull();
@@ -29,7 +30,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_WriteToStream_WritesToStream()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollXmlWriter>>();
       IPayrollWriter subject = new PayrollXmlWriter(logger);
       var stream = new MemoryStream();
       var employees = new List<Employee>();
@@ -50,7 +50,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_WriteToStream_ShouldHaveCorrectData()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollXmlWriter>>();
       IPayrollWriter subject = new PayrollXmlWriter(logger);
       var stream = new MemoryStream();
       var transaction = new Transaction

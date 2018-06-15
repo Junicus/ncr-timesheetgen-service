@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace IRSI.PayrollGen.Services.Adapters
 {
-  public interface IEnvironmentVariableAdapter
+  public interface IPayrollFileAdapter
   {
-    string GetvEnvironmentVariable(string variableName);
+    void CreateMarker(string path);
   }
 }

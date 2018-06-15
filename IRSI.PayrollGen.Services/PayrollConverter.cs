@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using IRSI.PayrollGen.AlohaData;
 using IRSI.PayrollGen.Models;
-using IRSI.PayrollGen.Services.Adapters;
+using NLog;
 
 namespace IRSI.PayrollGen.Services
 {
   public class PayrollConverter : IPayrollConverter
   {
-    private readonly ILoggerAdapter<PayrollConverter> _logger;
+    private readonly ILogger _logger;
+    //private readonly ILoggerAdapter<PayrollConverter> _logger;
     private readonly IPayrollConverterUtils _payrollConverterUtils;
     private readonly IEmployeeRepositoryService _employeeRepositoryService;
 
     public PayrollConverter(
-      ILoggerAdapter<PayrollConverter> logger,
+      ILogger logger,
       IPayrollConverterUtils payrollConverterUtils,
       IEmployeeRepositoryService employeeRepositoryService
       )

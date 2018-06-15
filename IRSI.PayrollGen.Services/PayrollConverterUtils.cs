@@ -3,14 +3,16 @@ using System.Linq;
 using IRSI.PayrollGen.AlohaData;
 using IRSI.PayrollGen.Models;
 using IRSI.PayrollGen.Services.Adapters;
+using NLog;
 
 namespace IRSI.PayrollGen.Services
 {
   public class PayrollConverterUtils : IPayrollConverterUtils
   {
-    private readonly ILoggerAdapter<PayrollConverterUtils> _logger;
+    private readonly ILogger _logger;
+    //private readonly ILoggerAdapter<PayrollConverterUtils> _logger;
 
-    public PayrollConverterUtils(ILoggerAdapter<PayrollConverterUtils> logger)
+    public PayrollConverterUtils(ILogger logger)
     {
       _logger = logger;
     }
@@ -78,7 +80,7 @@ namespace IRSI.PayrollGen.Services
 
     public List<Employee> GetEmployees(AlohaDataset data)
     {
-      _logger.LogDebug("GetEmployees called");
+      _logger.Debug("GetEmployees called");
       var employees = new List<Employee>();
 
       foreach (var empRow in data.emp)
@@ -91,7 +93,7 @@ namespace IRSI.PayrollGen.Services
 
     public List<Transaction> GetShifts(AlohaDataset data, List<int> ignoreJobCodeList)
     {
-      _logger.LogDebug("GetShifts called");
+      _logger.Debug("GetShifts called");
       var transactions = new List<Transaction>();
 
       foreach (var adjtimeRow in data.adjtime)
@@ -105,7 +107,7 @@ namespace IRSI.PayrollGen.Services
 
     public List<Transaction> GetTips(AlohaDataset data, List<int> ignoreJobCodeList, TipCalculation tipCalculationStrategy)
     {
-      _logger.LogDebug("GetTips called");
+      _logger.Debug("GetTips called");
       var transactions = new List<Transaction>();
 
       foreach (var adjtimeRow in data.adjtime.Where(t => t.cctips > 0m || t.dectips > 0m))
@@ -119,7 +121,7 @@ namespace IRSI.PayrollGen.Services
 
     public List<Transaction> GetBreaks(AlohaDataset data, List<int> ignoreJobCodeList)
     {
-      _logger.LogDebug("GetBreaks called");
+      _logger.Debug("GetBreaks called");
       var transactions = new List<Transaction>();
 
       foreach (var gndbreakRow in data.gndbreak)

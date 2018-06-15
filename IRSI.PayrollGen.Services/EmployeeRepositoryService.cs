@@ -5,14 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using IRSI.PayrollGen.Models;
 using IRSI.PayrollGen.Services.Adapters;
+using NLog;
 
 namespace IRSI.PayrollGen.Services
 {
   public class EmployeeRepositoryService : IEmployeeRepositoryService
   {
-    private readonly ILoggerAdapter<EmployeeRepositoryService> _logger;
+    private readonly ILogger _logger;
+    //private readonly ILoggerAdapter<EmployeeRepositoryService> _logger;
 
-    public EmployeeRepositoryService(ILoggerAdapter<EmployeeRepositoryService> logger)
+    public EmployeeRepositoryService(ILogger logger)
     {
       _logger = logger;
       Employees = new Dictionary<int, Employee>();
@@ -30,7 +32,7 @@ namespace IRSI.PayrollGen.Services
         }
         else
         {
-          _logger.LogWarning($"Employee with ID {employee.ID} already added");
+          _logger.Warn($"Employee with ID {employee.ID} already added");
         }
       }
     }
@@ -46,7 +48,7 @@ namespace IRSI.PayrollGen.Services
         }
         else
         {
-          _logger.LogWarning($"Employee {transaction.EmpId} was not found");
+          _logger.Warn($"Employee {transaction.EmpId} was not found");
         }
       }
     }

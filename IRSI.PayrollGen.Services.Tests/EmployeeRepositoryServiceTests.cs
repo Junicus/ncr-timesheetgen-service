@@ -6,16 +6,18 @@ using IRSI.PayrollGen.Models;
 using IRSI.PayrollGen.Services.Adapters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NLog;
 
 namespace IRSI.PayrollGen.Services.Tests
 {
   [TestClass]
   public class EmployeeRepositoryServiceTests
   {
+    ILogger logger = Mock.Of<ILogger>();
+
     [TestMethod]
     public void Can_Create_Employee_Repository_Service()
     {
-      var logger = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
       var subject = new EmployeeRepositoryService(logger);
       subject.Should().NotBeNull();
       subject.Should().BeAssignableTo<IEmployeeRepositoryService>();
@@ -26,7 +28,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_LoadEmployees_Employee_Are_Same()
     {
-      var logger = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
       var id1 = 1;
       var id2 = 2;
       var employee1 = new Employee { ID = id1 };
@@ -46,7 +47,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_LoadEmployees_Adding_Duplicates_Should_Add_First()
     {
-      var logger = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
       var id1 = 1;
       var employee1 = new Employee { ID = id1, SocialSecurity = "1" };
       var employee2 = new Employee { ID = id1, SocialSecurity = "2" };
@@ -61,7 +61,7 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_LoadEmployees_Adding_Suplicates_Should_LogWarning()
     {
-      var logger = new Mock<ILoggerAdapter<EmployeeRepositoryService>>();
+      var logger = new Mock<ILogger>();
       var id1 = 1;
       var employee1 = new Employee { ID = id1 };
       var employee2 = new Employee { ID = id1 };
@@ -70,13 +70,12 @@ namespace IRSI.PayrollGen.Services.Tests
 
       subject.LoadEmployees(employees);
 
-      logger.Verify(c => c.LogWarning(It.IsAny<string>()), Times.Once());
+      logger.Verify(c => c.Warn(It.IsAny<string>()), Times.Once());
     }
 
     [TestMethod]
     public void On_LoadTransactions_Single_Employee_Should_Have_Transactions()
     {
-      var logger = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
       var id1 = 1;
       var employee1 = new Employee { ID = id1 };
       var employees = new List<Employee> { employee1 };
@@ -96,7 +95,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_LoadTransactions_Single_Employee_Transaction_Should_Have_SSN()
     {
-      var logger = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
       var id1 = 1;
       var ssn1 = "1";
       var employee1 = new Employee { ID = id1, SocialSecurity = ssn1 };
@@ -114,7 +112,7 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_LoadTransactions_Employee_NotFound_Should_Warn()
     {
-      var logger = new Mock<ILoggerAdapter<EmployeeRepositoryService>>();
+      var logger = new Mock<ILogger>();
       var id1 = 1;
       var ssn1 = "1";
       var employee1 = new Employee { ID = id1, SocialSecurity = ssn1 };
@@ -126,13 +124,12 @@ namespace IRSI.PayrollGen.Services.Tests
 
       subject.LoadTransactions(transactions);
 
-      logger.Verify(c => c.LogWarning(It.IsAny<string>()), Times.Once);
+      logger.Verify(c => c.Warn(It.IsAny<string>()), Times.Once);
     }
 
     [TestMethod]
     public void On_LoadTransactions_Mult_Employee_Should_Have_Transactions()
     {
-      var logger = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
       int id1 = 1, id2 = 2;
       string ssn1 = "1", ssn2 = "2";
       var employee1 = new Employee { ID = id1, SocialSecurity = ssn1 };
@@ -155,7 +152,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_LoadTransactions_Mult_Employee_Transaction_Should_Have_SSN()
     {
-      var logger = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
       int id1 = 1, id2 = 2;
       string ssn1 = "1", ssn2 = "2";
       var employee1 = new Employee { ID = id1, SocialSecurity = ssn1 };
@@ -180,7 +176,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_AdjustPaycodesForMultipleShifts_PayCodeTransactionsAreFixed()
     {
-      var logger = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
       int id1 = 1;
       string ssn1 = "1";
       var employee1 = new Employee { ID = id1, SocialSecurity = ssn1 };

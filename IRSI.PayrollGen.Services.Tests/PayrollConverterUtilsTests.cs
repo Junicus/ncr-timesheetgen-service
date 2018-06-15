@@ -7,17 +7,18 @@ using IRSI.PayrollGen.Models;
 using IRSI.PayrollGen.Services.Adapters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NLog;
 
 namespace IRSI.PayrollGen.Services.Tests
 {
   [TestClass]
   public class PayrollConverterUtilsTests
   {
+    private ILogger logger = Mock.Of<ILogger>();
+
     [TestMethod]
     public void Can_Create_PayrollConverterUtils()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
-
       var subject = new PayrollConverterUtils(logger);
 
       subject.Should().NotBeNull();
@@ -27,7 +28,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_ConvertEmployeeRow_GetRightEmployee()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       var data = new AlohaDataset();
       var empRow = AlohaDataUtils.CreateEmpRow(data, 1, "123456789", "Test", "Employee", 123456789);
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
@@ -44,7 +44,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_ConvertShiftRow_GetRightShift()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       var data = new AlohaDataset();
       var adjtimeRow = AlohaDataUtils.CreateAdjTimeRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m, 10m, 10m);
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
@@ -65,7 +64,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_ConvertTipRow_GetRightTip_Using_Strategy_Auto()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       var data = new AlohaDataset();
       var adjtimeRow = AlohaDataUtils.CreateAdjTimeRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m, 1m, 2m);
       var adjtimeRow2 = AlohaDataUtils.CreateAdjTimeRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m, 2m, 1m);
@@ -91,7 +89,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_ConvertBreakRow_GetRightShift()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       var data = new AlohaDataset();
       var gndbroeakRow = AlohaDataUtils.CreateBreakRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m);
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
@@ -113,7 +110,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_GetEmployees_Gets_EmployeeEnumerable()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
       var data = new AlohaDataset();
       var empRow = AlohaDataUtils.CreateEmpRow(data, 1, "123456789", "Test", "Employee", 123456789);
@@ -129,7 +125,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_GetEmployees_Gets_All_Employees()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
       var data = new AlohaDataset();
       var empRow = AlohaDataUtils.CreateEmpRow(data, 1, "123456789", "Test", "Employee1", 123456789);
@@ -147,7 +142,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_GetShifts_Get_TransactionEnumerable()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
       var data = new AlohaDataset();
       var adjtimeRow = AlohaDataUtils.CreateAdjTimeRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m, 10m, 10m);
@@ -164,7 +158,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_GetShifts_Gets_All_Transactions()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
       var data = new AlohaDataset();
       var adjtimeRow = AlohaDataUtils.CreateAdjTimeRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m, 10m, 10m);
@@ -183,7 +176,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_GetShifts_Ingores_From_IgnoreList()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
       var data = new AlohaDataset();
       var adjtimeRow = AlohaDataUtils.CreateAdjTimeRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m, 10m, 10m);
@@ -198,7 +190,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_GetTips_Get_TransactionEnumerable()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
       var data = new AlohaDataset();
       var adjtimeRow = AlohaDataUtils.CreateAdjTimeRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m, 10m, 10m);
@@ -216,7 +207,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_GetTips_Gets_All_Transactions()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
       var data = new AlohaDataset();
       var adjtimeRow = AlohaDataUtils.CreateAdjTimeRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m, 10m, 10m);
@@ -236,7 +226,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_GetTips_Ingores_From_IgnoreList()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
       var data = new AlohaDataset();
       var adjtimeRow = AlohaDataUtils.CreateAdjTimeRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m, 10m, 10m);
@@ -252,7 +241,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_GetBreaks_Get_TransactionEnumerable()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
       var data = new AlohaDataset();
       var gndbreakRow = AlohaDataUtils.CreateBreakRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m);
@@ -269,7 +257,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_GetBreaks_Gets_All_Transactions()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
       var data = new AlohaDataset();
       var gndbreakRow = AlohaDataUtils.CreateBreakRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m);
@@ -288,7 +275,6 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_GetBreaks_Ingores_From_IgnoreList()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
       IPayrollConverterUtils subject = new PayrollConverterUtils(logger);
       var data = new AlohaDataset();
       var adjtimeRow = AlohaDataUtils.CreateAdjTimeRow(data, 1, "", DateTime.Today, DateTime.Today, DateTime.Today, 1, 12, 0, 12, 30, 0.5m, 10m, 10m);

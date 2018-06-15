@@ -6,16 +6,17 @@ using IRSI.PayrollGen.Models;
 using IRSI.PayrollGen.Services.Adapters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NLog;
 
 namespace IRSI.PayrollGen.Services.Tests
 {
   [TestClass]
   public class PayrollConverterTests
   {
+    private ILogger logger = Mock.Of<ILogger>();
     [TestMethod]
     public void Can_Create_Payroll_Converter()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverter>>();
       var payrollConverterUtils = Mock.Of<IPayrollConverterUtils>();
       var employeeRepository = Mock.Of<IEmployeeRepositoryService>();
 
@@ -28,11 +29,8 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_Convert_Payroll_EmptyData_Returns_EmptyList()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverter>>();
-      var logger2 = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
-      var logger3 = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
-      IPayrollConverterUtils payrollConverterUtils = new PayrollConverterUtils(logger2);
-      var employeeRepository = new EmployeeRepositoryService(logger3);
+      IPayrollConverterUtils payrollConverterUtils = new PayrollConverterUtils(logger);
+      var employeeRepository = new EmployeeRepositoryService(logger);
       IPayrollConverter subject = new PayrollConverter(logger, payrollConverterUtils, employeeRepository);
       var data = new AlohaDataset();
       var tipStrategy = TipCalculation.Auto;
@@ -46,11 +44,8 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_Convert_Payroll_OnlyEmployees_ReturnsListWith_EmptyTransactions()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverter>>();
-      var logger2 = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
-      var logger3 = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
-      IPayrollConverterUtils payrollConverterUtils = new PayrollConverterUtils(logger2);
-      var employeeRepository = new EmployeeRepositoryService(logger3);
+      IPayrollConverterUtils payrollConverterUtils = new PayrollConverterUtils(logger);
+      var employeeRepository = new EmployeeRepositoryService(logger);
       IPayrollConverter subject = new PayrollConverter(logger, payrollConverterUtils, employeeRepository);
       var data = new AlohaDataset();
       var empRow = AlohaDataUtils.CreateEmpRow(data, 1, "123456789", "Test", "Employee", 123456789);
@@ -67,11 +62,8 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_Convert_Payroll_EmpFullData_ReturnsListWith_Transactions()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverter>>();
-      var logger2 = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
-      var logger3 = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
-      IPayrollConverterUtils payrollConverterUtils = new PayrollConverterUtils(logger2);
-      var employeeRepository = new EmployeeRepositoryService(logger3);
+      IPayrollConverterUtils payrollConverterUtils = new PayrollConverterUtils(logger);
+      var employeeRepository = new EmployeeRepositoryService(logger);
       IPayrollConverter subject = new PayrollConverter(logger, payrollConverterUtils, employeeRepository);
       var data = new AlohaDataset();
       var empRow = AlohaDataUtils.CreateEmpRow(data, 1, "123456789", "Test", "Employee", 123456789);
@@ -93,11 +85,8 @@ namespace IRSI.PayrollGen.Services.Tests
     [TestMethod]
     public void On_Convert_Payroll_MultipleShift_FixesTips()
     {
-      var logger = Mock.Of<ILoggerAdapter<PayrollConverter>>();
-      var logger2 = Mock.Of<ILoggerAdapter<PayrollConverterUtils>>();
-      var logger3 = Mock.Of<ILoggerAdapter<EmployeeRepositoryService>>();
-      IPayrollConverterUtils payrollConverterUtils = new PayrollConverterUtils(logger2);
-      var employeeRepository = new EmployeeRepositoryService(logger3);
+      IPayrollConverterUtils payrollConverterUtils = new PayrollConverterUtils(logger);
+      var employeeRepository = new EmployeeRepositoryService(logger);
       IPayrollConverter subject = new PayrollConverter(logger, payrollConverterUtils, employeeRepository);
       var data = new AlohaDataset();
       var empRow = AlohaDataUtils.CreateEmpRow(data, 1, "123456789", "Test", "Employee", 123456789);

@@ -3,14 +3,16 @@ using System.IO;
 using System.Xml.Serialization;
 using IRSI.PayrollGen.Models;
 using IRSI.PayrollGen.Services.Adapters;
+using NLog;
 
 namespace IRSI.PayrollGen.Services
 {
   public class PayrollXmlWriter : IPayrollWriter
   {
-    private readonly ILoggerAdapter<PayrollXmlWriter> _logger;
+    public readonly ILogger _logger;
+    //private readonly ILoggerAdapter<PayrollXmlWriter> _logger;
 
-    public PayrollXmlWriter(ILoggerAdapter<PayrollXmlWriter> logger)
+    public PayrollXmlWriter(ILogger logger)
     {
       _logger = logger;
     }

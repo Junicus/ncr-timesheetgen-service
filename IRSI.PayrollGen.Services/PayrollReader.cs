@@ -1,6 +1,7 @@
 ﻿using IRSI.PayrollGen.AlohaData;
 using IRSI.PayrollGen.AlohaData.AlohaDatasetTableAdapters;
 using IRSI.PayrollGen.Services.Adapters;
+using NLog;
 using System;
 using System.IO;
 
@@ -8,9 +9,10 @@ namespace IRSI.PayrollGen.Services
 {
   public class PayrollReader : IPayrollReader
   {
-    private readonly ILoggerAdapter<PayrollReader> _logger;
+    private readonly ILogger _logger;
+    //private readonly ILoggerAdapter<PayrollReader> _logger;
 
-    public PayrollReader(ILoggerAdapter<PayrollReader> logger)
+    public PayrollReader(ILogger logger)
     {
       _logger = logger;
     }
@@ -23,33 +25,33 @@ namespace IRSI.PayrollGen.Services
 
       if (Directory.Exists(folder))
       {
-        _logger.LogInformation($"ReadPayroll was called for folder {folder}");
+        _logger.Info($"ReadPayroll was called for folder {folder}");
         var result = new AlohaDataset();
 
-        _logger.LogDebug("Loading emp table");
+        _logger.Debug("Loading emp table");
         var empAdapter = new empTableAdapter();
         empAdapter.Connection.ConnectionString = GetConnectionString(folder);
         empAdapter.Fill(result.emp);
-        _logger.LogDebug($"Done loading emp, {result.emp.Count} loaded");
+        _logger.Debug($"Done loading emp, {result.emp.Count} loaded");
 
-        _logger.LogDebug("Loading adjtime table");
+        _logger.Debug("Loading adjtime table");
         var adjtimeAdapter = new adjtimeTableAdapter();
         adjtimeAdapter.Connection.ConnectionString = GetConnectionString(folder);
         adjtimeAdapter.Fill(result.adjtime);
-        _logger.LogDebug($"Done loading adjtime, {result.adjtime.Count} loaded");
+        _logger.Debug($"Done loading adjtime, {result.adjtime.Count} loaded");
 
-        _logger.LogDebug("Loading gndbreak table");
+        _logger.Debug("Loading gndbreak table");
         var gndbreakAdapter = new gndbreakTableAdapter();
         gndbreakAdapter.Connection.ConnectionString = GetConnectionString(folder);
         gndbreakAdapter.Fill(result.gndbreak);
-        _logger.LogDebug($"Done loading gndbreak, {result.gndbreak.Count} loaded");
+        _logger.Debug($"Done loading gndbreak, {result.gndbreak.Count} loaded");
 
-        _logger.LogInformation("Done ReadPayroll");
+        _logger.Info("Done ReadPayroll");
         return result;
       }
       else
       {
-        _logger.LogWarning($"ReadPayroll: Folder {folder} not found");
+        _logger.Warn($"ReadPayroll: Folder {folder} not found");
         return null;
       }
     }
